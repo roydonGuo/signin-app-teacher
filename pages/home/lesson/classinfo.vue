@@ -10,6 +10,9 @@
 					<view v-if="item.signinEnd" class="task-end">已结束</view>
 					<view class="fw600">标题：{{item.title}}</view>
 					<view>签到人数：{{item.realSigninCount}}/{{item.waitSigninCount}}</view>
+					<view class="signin-complate" v-if="item.realSigninCount==item.waitSigninCount"><u-icon
+							name="checkmark-circle" color="#00aa00" size="24"></u-icon>签到完成
+					</view>
 					<view class="cg fs9">发起时间：{{item.createTime}}</view>
 					<view class="cg fs9">签到时间：
 						<view>{{item.beginTime}}</view>
@@ -33,10 +36,12 @@
 											shape="circle" :lazy-load="true"></u-image>
 									</view>
 									<view class="center">
-										<view class="fw600">{{item.nickName}}</view>
+										<view class="fw600" style="font-size: 1.2rem;">{{item.nickName}}</view>
 										<view class="fs9 cg">签到时间：{{item.createTime}}</view>
 										<view v-if="item.addressDetail" class="fs9 cg">签到地点：{{item.addressDetail}}
 										</view>
+										<view v-if="item.faceStatus=='1'" class="fs9 cg tips-green">签到成功</view>
+										<view v-if="item.faceStatus=='0'" class="fs9 cg tips-red">签到失败</view>
 									</view>
 								</view>
 								<view class="right" v-if="item.pictureUrl">
@@ -281,8 +286,8 @@
 		margin: 0 1rem 1rem;
 		border-radius: .5rem;
 		background-color: white;
-		
-		.task-end{
+
+		.task-end {
 			color: white;
 			background-color: green;
 			position: absolute;
@@ -318,5 +323,20 @@
 			.right {}
 		}
 
+	}
+
+	.tips-green {
+		color: green;
+	}
+
+	.tips-red {
+		color: red;
+	}
+
+	.signin-complate {
+		position: absolute;
+		right: 5px;
+		bottom: 5px;
+		color: green;
 	}
 </style>

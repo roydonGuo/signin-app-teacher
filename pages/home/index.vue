@@ -60,6 +60,9 @@
 	import {
 		myLessonPage
 	} from "@/api/app/lesson"
+	import {
+		listAppNotice
+	} from "@/api/app/notice.js"
 
 	export default {
 		data() {
@@ -84,18 +87,29 @@
 						image: '/static/images/banner/banner03.jpg'
 					}
 				],
-				swiperData: [
-					'https://cdn.uviewui.com/uview/swiper/swiper1.png',
-					'https://cdn.uviewui.com/uview/swiper/swiper2.png',
-					'https://cdn.uviewui.com/uview/swiper/swiper3.png'
-				],
+				swiperData: [],
+				queryParams: {
+					pageNum: 1,
+					pageSize: 5,
+					showInApp: "1",
+				},
+				// 公告表格数据
+				noticeList: [],
 			}
 		},
 		created() {
 			// this.getCode()
 			this.initMyLesson()
+			this.getNoticeList()
 		},
 		methods: {
+			getNoticeList() {
+				listAppNotice(this.queryParams).then(response => {
+					this.noticeList = response.rows
+					console.log(this.noticeList)
+					this.swiperData = this.noticeList.map(notice => notice.noticeImgUrl);
+				})
+			},
 			initMyLesson() {
 				this.loading = true
 				myLessonPage(this.lessonPageDTO).then(res => {
