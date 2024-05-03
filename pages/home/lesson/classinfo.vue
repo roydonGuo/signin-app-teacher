@@ -3,6 +3,8 @@
 		<u-navbar :title="className" :autoBack="true" safeAreaInsetTop fixed :placeholder="true">
 		</u-navbar>
 		<view>
+			<u-button style="width: 400rpx;margin-top: 1rem;" :throttleTime="1000" type="info" text="学生列表"
+				@click="handleStudentList"></u-button>
 			<u-button style="width: 400rpx;margin-top: 1rem;" :throttleTime="1000" type="primary"
 				icon="plus-circle-fill" text="发起签到" @click="handlePublishSignin"></u-button>
 			<view class="" style="margin-top: 1rem;">
@@ -41,7 +43,7 @@
 										<view v-if="item.addressDetail" class="fs9 cg">签到地点：{{item.addressDetail}}
 										</view>
 										<view v-if="item.faceStatus=='1'" class="fs9 cg tips-green">签到成功</view>
-										<view v-if="item.faceStatus=='0'" class="fs9 cg tips-red">签到失败</view>
+										<!-- <view v-if="item.faceStatus=='0'" class="fs9 cg tips-red">签到失败</view> -->
 									</view>
 								</view>
 								<view class="right" v-if="item.pictureUrl">
@@ -87,7 +89,34 @@
 						icon="checkbox-mark" text="确认提交" @click="confirmPublishSignin"></u-button>
 				</view>
 			</u-popup>
+			<u-popup :show="showStudentList" :round="10" :closeable="true" @close="closeStudentList"
+				@open="openStudentList">
+				<view class="task-info-popup">
+					<view class="plr1rem"><text>学生列表</text></view>
+					<view class="signin-record">
+						<view v-for="item in studentList" class="signin-record-item flex-between">
+							<view class="flex-start">
+								<view class="left">
+									<u-image :src="item.user.avatar" mode="widthFix" width="64px" height="64px"
+										shape="circle" :lazy-load="true"></u-image>
+								</view>
+								<view class="center">
+									<view class="flex-between">
+										<view class="fw600" style="font-size: 1.2rem;">{{item.user.nickName}}
 
+										</view>
+										<view class="fw600" style="color: red;" v-if="item.monitorFlag=='1'">班长</view>
+									</view>
+								</view>
+							</view>
+							<view class="right" v-if="item.monitorFlag=='0'">
+								<u-button style="width: 200rpx;margin-top: 1rem;" :throttleTime="1000" type="primary"
+									text="设为班长" @click="handleAuthMonitor(item.studentId)"></u-button>
+							</view>
+						</view>
+					</view>
+				</view>
+			</u-popup>
 		</view>
 		<u-toast ref="uToast"></u-toast>
 	</view>
@@ -95,7 +124,9 @@
 
 <script>
 	import {
-		addLessonClass
+		addLessonClass,
+		classStudentList,
+		authMonitor
 	} from "@/api/app/lessonClass.js";
 	import {
 		addSigninTask,
@@ -148,6 +179,8 @@
 				],
 				showSigninTypePicker: false,
 				signinTypePickerValue: "",
+				showStudentList: false,
+				studentList: [],
 			}
 		},
 		onLoad(option) {
@@ -274,6 +307,37 @@
 							// 无更多数据
 							this.dataNotMore = true
 						}
+					}
+				})
+			},
+			handleStudentList() {
+				this.showStudentList = true
+				classStudentList(this.classId).then(res => {
+					if (res.code === 200) {
+						this.studentList = res.data
+					}
+				})
+			},
+			closeStudentList() {
+				this.showStudentList = false
+			},
+			openStudentList() {
+				this.showStudentList = true
+			},
+			// 设为班长
+			handleAuthMonitor(studentId) {
+				console.log(studentId)
+				authMonitor(this.classId, studentId).then(res => {
+					if (res.code === 200) {
+						this.$refs.uToast.show({
+							type: "success",
+							message: "操作成功"
+						});
+						classStudentList(this.classId).then(res => {
+							if (res.code === 200) {
+								this.studentList = res.data
+							}
+						})
 					}
 				})
 			}

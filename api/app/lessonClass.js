@@ -17,3 +17,18 @@ export function addLessonClass(data) {
 		'data': data
 	})
 }
+
+// 班级学生列表
+export function classStudentList(classId) {
+	return request({
+		'url': '/app/lessonClassStudent/studentList/' + classId,
+		'method': 'get'
+	})
+}
+// 设为班长
+export function authMonitor(classid, userId) {
+	return request({
+		'url': '/app/lessonClassStudent/authMonitor/' + classid + "/" + userId,
+		'method': 'get'
+	})
+}
