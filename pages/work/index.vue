@@ -1,20 +1,10 @@
 <template>
 	<view class="work-container">
-		<!-- 轮播图 -->
-		<uni-swiper-dot class="uni-swiper-dot-box" :info="data" :current="current" field="content">
-			<swiper class="swiper-box" :current="swiperDotIndex" @change="changeSwiper">
-				<swiper-item v-for="(item, index) in data" :key="index">
-					<view class="swiper-item" @click="clickBannerItem(item)">
-						<image :src="item.image" mode="aspectFill" :draggable="false" />
-					</view>
-				</swiper-item>
-			</swiper>
-		</uni-swiper-dot>
 
 		<!-- 宫格组件 -->
 		<uni-section title="系统管理" type="line"></uni-section>
 		<view class="grid-body">
-			<uni-grid :column="4" :showBorder="false" @change="changeGrid">
+			<!-- <uni-grid :column="4" :showBorder="false" @change="changeGrid">
 				<uni-grid-item>
 					<view class="grid-item-box">
 						<uni-icons type="person-filled" size="30"></uni-icons>
@@ -69,7 +59,7 @@
 						<text class="text">日志管理</text>
 					</view>
 				</uni-grid-item>
-			</uni-grid>
+			</uni-grid> -->
 		</view>
 	</view>
 </template>

@@ -1,6 +1,6 @@
 // 应用全局配置
 module.exports = {
-	baseUrl: 'https://66814f6e.r9.vip.cpolar.cn',
+	baseUrl: 'https://29dd8b90.r11.cpolar.top',
 	// baseUrl: 'http://localhost:8088',
 	// 应用信息
 	appInfo: {
